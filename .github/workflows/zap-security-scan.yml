@@ -1,26 +1,35 @@
-name: Zap Security Scan
+name: ZAP Full Scan Single Random URL
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  scan:
+  zap_scan:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-      - name: Install OWASP ZAP
+      - name: Read a random URL from CSV
+        id: get_url
         run: |
-          sudo apt-get update
-          sudo apt-get install -y zaproxy
+          url=$(tail -n +2 list.csv | cut -d',' -f1 | shuf -n 1)
+          echo "Random URL chosen: $url"
+          echo "url=$url" >> $GITHUB_OUTPUT
 
-      - name: Read URLs from CSV and scan
-        run: |
-          while IFS=, read -r url; do
-            echo "Scanning $url"
-            zap.sh -cmd -quickurl "$url" -quickout report.html
-          done < urls.csv
+      - name: ZAP Full Scan
+        uses: zaproxy/action-full-scan@v0.12.0
+        with:
+          target: ${{ steps.get_url.outputs.url }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          docker_name: 'ghcr.io/zaproxy/zaproxy:stable'
+          cmd_options: '-a -r zap-full-report.html'
+          allow_issue_writing: false  # Zet op true als je issues wil aanmaken
+          artifact_name: zap-full-report
+
+      - name: Upload ZAP report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-full-report
+          path: zap-full-report.html
