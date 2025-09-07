@@ -14,7 +14,7 @@ jobs:
       - name: Read a random URL from CSV
         id: get_url
         run: |
-          url=$(tail -n +2 list.csv | cut -d',' -f1 | shuf -n 1)
+          url=$(tail -n +2 data/list.csv | cut -d',' -f1 | shuf -n 1)
           echo "Random URL chosen: $url"
           echo "url=$url" >> $GITHUB_OUTPUT
 
