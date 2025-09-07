@@ -1,0 +1,26 @@
+name: Zap Security Scan
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install OWASP ZAP
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zaproxy
+
+      - name: Read URLs from CSV and scan
+        run: |
+          while IFS=, read -r url; do
+            echo "Scanning $url"
+            zap.sh -cmd -quickurl "$url" -quickout report.html
+          done < urls.csv
