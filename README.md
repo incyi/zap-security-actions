@@ -1,4 +1,3 @@
-# zap-security-actions
 # ZAP Security Actions
 
 [![ZAP Full Scan Single Random URL](https://github.com/incyi/zap-security-actions/actions/workflows/zap-security-scan.yml/badge.svg)](https://github.com/incyi/zap-security-actions/actions/workflows/zap-security-scan.yml)
@@ -9,16 +8,6 @@ This repository contains a **GitHub Actions workflow** to perform a **full OWASP
 
 ## Features
 
-- Automatically selects a **random URL** from `data/list.csv`.
-- Supports **custom ZAP rules** via `.zap/rules.json`.
-- Generates **HTML reports** (`zap-full-report.html`) for each run.
-- Optional GitHub issue creation from ZAP findings.
-- Works with **submodules** (or normal folders) containing URLs.
-- Unique artifact names for each run to prevent overwriting.
+- Automatically selects a **random URL** from my `data/` repo.
 
 ---
-
-## Workflow Details
-
-The workflow file is located at:
-
