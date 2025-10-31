@@ -20,7 +20,6 @@ jobs:
         id: get_url
         run: |
           url=$(awk -F',' 'NR>1 {print $1}' data/list.csv | shuf -n 1)
-          # Add https:// if no protocol present
           if [[ ! "$url" =~ ^https?:// ]]; then
             url="https://$url"
           fi
